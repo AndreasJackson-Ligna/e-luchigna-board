@@ -1,21 +1,35 @@
 # jiva
 Code for and board files for Power unit tempearure sensor
+
+## Links
+This repo [Jiva-Board](https://github.com/arvidblaser/jiva-board)  
+Test application [Jiva-BlinkySleepUarty](https://github.com/arvidblaser/jiva-blinkySleepyUarty)  
+BLE (main) application [Jiva-ble](https://github.com/arvidblaser/jiva-ble)  
+
 ## Configuration
 
 create folder C:\git
 and then in git bash cmd
 ```
 cd /c/git
-git clone https://github.com/arvidblaser/jiva.git
+git clone https://github.com/arvidblaser/jiva-board.git
+git clone https://github.com/arvidblaser/jiva-blinkySleepyUarty.git
+git clone https://github.com/arvidblaser/jiva-ble.git
+
 code .
 ```
-Check that the chosen SDK and toolchain is 2.6.1 (other versions may work, but not tested)
+Check that the chosen SDK and toolchain is 2.6.1 (other versions may work, but not tested. This should be preconfigugured in the .vscode-folder in the settings.json. This is also the place where I have preconfigured where the NRF-plugin should look for custom boards with the "nrf-connect.boardRoots"-parameter)
+
+
+Add build configurations for the projects by choosing jiva board (should exist a custom boards choice with it) and keep the default on the oher sections.
 
 Test to build and flash the blinkySleepyUarty - example. It should demonstrante that led blinks and that deep sleep and Uart works as expected.
 
-If that works build the Jiva project.
+If that works build the Jiva-ble project.
 
 Note that the projects have different jiva.overlay files as more pins are enabled in full Jiva Project.
+
+
 
 ## Onetime steps to do for similar projects
 ### How to create a new board
