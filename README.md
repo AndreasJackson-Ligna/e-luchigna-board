@@ -15,12 +15,14 @@ cd /c/git
 git clone https://github.com/arvidblaser/jiva-board.git
 git clone https://github.com/arvidblaser/jiva-blinkySleepyUarty.git
 git clone https://github.com/arvidblaser/jiva-ble.git
-
-code .
 ```
 Check that the chosen SDK and toolchain is 2.6.1 (other versions may work, but not tested. This should be preconfigugured in the .vscode-folder in the settings.json. This is also the place where I have preconfigured where the NRF-plugin should look for custom boards with the "nrf-connect.boardRoots"-parameter)
 
-
+Open the full folder for the project you want in vs code. Easiest way:
+```
+cd /c/git/jiva-blinkySleepyUarty
+code .
+```
 Add build configurations for the projects by choosing jiva board (should exist a custom boards choice with it) and keep the default on the oher sections.
 
 Test to build and flash the blinkySleepyUarty - example. It should demonstrante that led blinks and that deep sleep and Uart works as expected.
