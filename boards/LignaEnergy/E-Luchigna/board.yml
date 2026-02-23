@@ -1,0 +1,5 @@
+board:
+  name: E-Luchigna
+  vendor: LignaEnergy
+  socs:
+    - name: nrf52832

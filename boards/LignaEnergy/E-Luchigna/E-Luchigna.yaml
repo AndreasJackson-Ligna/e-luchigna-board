@@ -1,0 +1,10 @@
+identifier: E-Luchigna/nrf52832
+name: E-paper nrf52-board
+vendor: LignaEnergy
+type: mcu
+arch: arm
+ram: 64
+flash: 512
+toolchain:
+  - zephyr
+supported: []
