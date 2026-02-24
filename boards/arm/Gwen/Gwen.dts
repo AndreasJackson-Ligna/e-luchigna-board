@@ -41,10 +41,10 @@
 	};
 };
 
-// p0.05 ADC-vcap  <--------- double check this part
+// p0.05 ADC-vcap
 // p0.07 led
 // p0.08 tmpon, p0.09 scl, p0.10 sda
-//uart? tp p023, swo p022
+// uart tx p023 (or p022 in your custom), swo p022
 // swclk, swdio
 
 / {
@@ -56,78 +56,81 @@
 		zephyr,console = &uart0;
     };
 
-
-	gpo{
+	gpo {
         compatible = "gpio-leds";
 
         led0: led_0 {
-			gpios= <&gpio0 7 GPIO_ACTIVE_HIGH>; // GPIO_ACTIVE_LOW in blinky example
-			label= "Debug led P0.07";
+			gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>; // Debug LED on P0.07
+			label = "Debug led P0.07";
 		};
 		tmpon: tmp_on {
-			gpios= <&gpio0 8 GPIO_ACTIVE_HIGH>; 
-			label= "I2C enable pin";
+			gpios = <&gpio0 8 GPIO_ACTIVE_HIGH>; // I2C enable pin on P0.08
+			label = "I2C enable pin";
 		};
-
     };
-
 };
 
 &gpio0 {
-    status  = "okay";
+    status = "okay";
 };
 
 &gpiote {
     status = "okay";
 };
 
-
 &i2c0 {
-	pinctrl-0 = <&i2c0_default>;
-	pinctrl-1 = <&i2c0_sleep>;
-	pinctrl-names = "default", "sleep";
+    pinctrl-0 = <&i2c0_default>;
+    pinctrl-1 = <&i2c0_sleep>;
+    pinctrl-names = "default", "sleep";
+    status = "okay";   // <-- ensure i2c0 is enabled
+
+    /* ---- Added SHT4x sensor node ---- */
+    sht4x@44 {
+        compatible = "sensirion,sht4x";   // driver binding
+        reg = <0x44>;                     // I²C address (0x44 or 0x45 possible)
+        repeatability = <0>;              // lowest power mode (can change)
+        label = "SHT4X";                  // name used by drivers
+    };
+    /* --------------------------------- */
 };
 
 &uart0 {
     status = "okay";
-    current-speed = < 0x1c200 >;
-    pinctrl-0 = < &uart0_default >;
-    pinctrl-1 = < &uart0_sleep >;
+    current-speed = <0x1c200>;
+    pinctrl-0 = <&uart0_default>;
+    pinctrl-1 = <&uart0_sleep>;
     pinctrl-names = "default", "sleep";
 };
 
-&pinctrl {    
-	status = "okay";
+&pinctrl {
+    status = "okay";
+
     i2c0_default: i2c0_default {
 		group1 {
 			psels = <NRF_PSEL(TWIM_SDA, 0, 10)>,
-					<NRF_PSEL(TWIM_SCL, 0, 9)>;
+			        <NRF_PSEL(TWIM_SCL, 0, 9)>;
 		};
 	};
 
 	i2c0_sleep: i2c0_sleep {
 		group1 {
 			psels = <NRF_PSEL(TWIM_SDA, 0, 10)>,
-					<NRF_PSEL(TWIM_SCL, 0, 9)>;
+			        <NRF_PSEL(TWIM_SCL, 0, 9)>;
 			low-power-enable;
 		};
 	};
 
 	uart0_default: uart0_default {
 		group1 {
-			psels = <NRF_PSEL(UART_TX, 0, 23)>;
-				//<NRF_PSEL(UART_RX, 0, xx)>,
-				//<NRF_PSEL(UART_RTS, 0, xx)>,
-				//<NRF_PSEL(UART_CTS, 0, xx)>;
+			// psels = <NRF_PSEL(UART_TX, 0, 23)>;
+			psels = <NRF_PSEL(UART_TX, 0, 22)>;
 		};
 	};
 
 	uart0_sleep: uart0_sleep {
 		group1 {
-			psels = <NRF_PSEL(UART_TX, 0, 23)>;
-				//<NRF_PSEL(UART_RX, 0, xx)>,
-				//<NRF_PSEL(UART_RTS, 0, xx)>,
-				//<NRF_PSEL(UART_CTS, 0, xx)>;
+			// psels = <NRF_PSEL(UART_TX, 0, 23)>;
+			psels = <NRF_PSEL(UART_TX, 0, 22)>;
 			low-power-enable;
 		};
 	};
@@ -136,21 +139,17 @@
 &adc {
 	#address-cells = <1>;
 	#size-cells = <0>;
-// if understood correctly internal is 0.6V  -> gain 1_3 gives 1.8/3 = 0.6-> close to reference
+
 	channel@0 {
 		reg = <0>;
 		zephyr,gain = "ADC_GAIN_1_6";
 		zephyr,reference = "ADC_REF_INTERNAL";
 		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
-		zephyr,input-positive = <NRF_SAADC_AIN3>;
-		zephyr,resolution = <14>;
-		zephyr,oversampling = <8>;
+		zephyr,input-positive = <NRF_SAADC_AIN3>;   /* measuring P0.05 */
+		//zephyr,resolution = <14>;
+		//zephyr,oversampling = <8>;
+		zephyr,resolution = <10>;
+		zephyr,oversampling = <0>;
 	};
-    status = "okay";
+	status = "okay";
 };
-
-
-
-
-
-
