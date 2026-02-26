@@ -1,2 +1,3 @@
 config BOARD_E-LUCHIGNA
+	bool "Custom board for E-LUCHIGNA"
 	select SOC_NRF52832_QFAA

@@ -1,0 +1,9 @@
+if BOARD_ELUCHIGNA
+
+config BOARD
+	default "eluchigna"
+
+config BT_CTLR
+	default BT
+
+endif # BOARD_ELUCHIGNA
